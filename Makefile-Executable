@@ -1,0 +1,28 @@
+CXX       := g++
+CXXFLAGS  := -m64 -O3 -fPIC -Wall
+LDFLAGS   := 
+OBJ_DIR   := ./.temp
+TARGET    := TARGET_NAME
+INCLUDE   := -Iinclude_path
+LDFLAGS   += -Llib_path -Wl,-rpath,lib_path
+LIBRARIES := 
+SOURCES   := Main.cpp
+OBJECTS   := $(SOURCES:%.cpp=$(OBJ_DIR)/%.o)
+
+all: build $(TARGET)
+
+$(OBJ_DIR)/%.o: %.cpp
+	@mkdir -p $(@D)
+	$(CXX) $(CXXFLAGS) $(INCLUDE) -o $@ -c $<
+
+$(TARGET): $(OBJECTS)
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) $(OBJECTS) $(LIBRARIES) -o $(TARGET)
+
+.PHONY: all build clean
+
+build:
+	@mkdir -p $(OBJ_DIR)
+
+clean:
+	-@rm -rvf $(OBJ_DIR)/*
+	-@rm $(TARGET)
